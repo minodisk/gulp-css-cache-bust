@@ -1,0 +1,45 @@
+{
+  "name": "gulp-css-cache-buster",
+  "version": "0.0.2",
+  "description": "Rebuild html with htmlparser2.",
+  "keywords": [
+    "gulpplugin",
+    "htmlparser"
+  ],
+  "main": "lib/gulp-css-cache-buster.js",
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script/register",
+    "istanbul": "coffee -c test && istanbul cover _mocha --report lcovonly -- -R spec && rm -rf ./coverage ./test/*.js",
+    "coveralls": "coffee -c test && istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage ./test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/minodisk/gulp-css-cache-buster.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/minodisk/gulp-css-cache-buster/issues"
+  },
+  "homepage": "https://github.com/minodisk/gulp-css-cache-buster",
+  "dependencies": {
+    "cloneextend": "0.0.3",
+    "gulp-util": "^3.0.0",
+    "htmlparser2": "git://github.com/minodisk/htmlparser2.git#stack-storage",
+    "through2": "^0.5.1"
+  },
+  "devDependencies": {
+    "coffee-script": "^1.7.1",
+    "coveralls": "^2.11.1",
+    "event-stream": "^3.1.7",
+    "expect": "^0.1.1",
+    "gulp": "^3.8.6",
+    "gulp-coffee": "^2.1.1",
+    "gulp-mocha": "^0.5.2",
+    "gulp-replace": "^0.4.0",
+    "gulp-watch": "^0.6.9",
+    "istanbul": "^0.3.0",
+    "mocha": "^1.21.3",
+    "mocha-lcov-reporter": "0.0.1"
+  }
+}
