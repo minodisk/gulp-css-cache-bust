@@ -1,2 +1,2 @@
-gulp-css-cache-buster
+gulp-css-cache-bust
 =====================

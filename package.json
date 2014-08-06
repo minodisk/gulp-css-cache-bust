@@ -1,12 +1,12 @@
 {
-  "name": "gulp-css-cache-buster",
+  "name": "gulp-css-cache-bust",
   "version": "0.0.2",
   "description": "Rebuild html with htmlparser2.",
   "keywords": [
     "gulpplugin",
     "htmlparser"
   ],
-  "main": "lib/gulp-css-cache-buster.js",
+  "main": "lib/gulp-css-cache-bust.js",
   "scripts": {
     "test": "mocha --compilers coffee:coffee-script/register",
     "istanbul": "coffee -c test && istanbul cover _mocha --report lcovonly -- -R spec && rm -rf ./coverage ./test/*.js",
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/minodisk/gulp-css-cache-buster.git"
+    "url": "https://github.com/minodisk/gulp-css-cache-bust.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/minodisk/gulp-css-cache-buster/issues"
+    "url": "https://github.com/minodisk/gulp-css-cache-bust/issues"
   },
-  "homepage": "https://github.com/minodisk/gulp-css-cache-buster",
+  "homepage": "https://github.com/minodisk/gulp-css-cache-bust",
   "dependencies": {
     "cloneextend": "0.0.3",
     "gulp-util": "^3.0.0",

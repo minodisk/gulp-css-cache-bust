@@ -6,7 +6,7 @@ through = require 'through2'
 { createReadStream } = require 'fs'
 { createHash } = require 'crypto'
 
-PLUGIN_NAME = 'gulp-css-cache-buster'
+PLUGIN_NAME = 'gulp-css-cache-bust'
 
 module.exports = (opts = {}) ->
   # opts = cloneextend defOpts, opts
