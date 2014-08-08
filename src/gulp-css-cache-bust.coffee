@@ -1,7 +1,5 @@
 through = require 'through2'
-{ PluginError, replaceExtension } = require 'gulp-util'
-{ PassThrough } = require 'stream'
-# { cloneextend } = require 'cloneextend'
+{ PluginError } = require 'gulp-util'
 { resolve } = require 'path'
 { createReadStream } = require 'fs'
 { createHash } = require 'crypto'
@@ -9,13 +7,20 @@ through = require 'through2'
 PLUGIN_NAME = 'gulp-css-cache-bust'
 
 module.exports = (opts = {}) ->
-  # opts = cloneextend defOpts, opts
 
   through.obj (file, enc, callback) ->
-    return callback() if file.isNull()
+    if file.isNull()
+      @push file
+      callback()
+      return
 
     if file.isBuffer()
       contents = file.contents.toString 'utf8'
+      unless /url\s*\(\s*['"]?(.*?)['"]?\s*\)/.test contents
+        @push file
+        callback()
+        return
+
       rUrl = /url\s*\(\s*['"]?(.*?)['"]?\s*\)/g
       i = 0
       done = =>
@@ -39,6 +44,5 @@ module.exports = (opts = {}) ->
               done()
           stream.pipe hash
           matched
-
 
     throw new PluginError 'Stream is not supported' if file.isStream()
