@@ -58,4 +58,4 @@ module.exports = (opts = {}) ->
             stream.pipe hash
             matched
 
-    throw new PluginError 'Stream is not supported' if file.isStream()
+    throw new PluginError PLUGIN_NAME, 'Stream is not supported' if file.isStream()
