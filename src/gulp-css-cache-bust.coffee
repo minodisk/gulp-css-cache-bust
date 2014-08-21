@@ -14,6 +14,8 @@ module.exports = (opts = {}) ->
   opts = assign clone(defOpts), opts
 
   through.obj (file, enc, callback) ->
+    replaceMap = {}
+
     if file.isNull()
       @push file
       callback()
@@ -27,23 +29,36 @@ module.exports = (opts = {}) ->
         return
 
       rUrl = /url\s*\(\s*['"]?(.*?)['"]?\s*\)/g
-      i = 0
+      counter = 0
       done = =>
+        counter--
+        return if counter > 0
+
+        for before, after of replaceMap
+          # console.log 'replace:', before, '->', after
+          contents = contents.split(before).join(after)
+
+        # console.log 'done:', file.path
+
         file.contents = new Buffer contents
         @push file
         callback()
 
       while (result = rUrl.exec contents)?
-        i++
-        do (result) ->
-          [matched, url] = result
-          path = resolve opts.base, '.' + url
+        [matched, url] = result
+        path = resolve opts.base, '.' + url
+        continue if replaceMap[matched]?
+        replaceMap[matched] = ''
 
+        counter++
+        do (matched, url, path) ->
+          # console.log 'start:', url
           exists path, (isExists) ->
             unless isExists
-              if --i is 0
-                done()
+              done()
               return
+
+            # console.log 'read hash:', path
 
             stream = createReadStream path
             hash = createHash 'md5'
@@ -52,10 +67,9 @@ module.exports = (opts = {}) ->
               stream.removeAllListeners()
               hash.end()
               buster = hash.read().substr 0, 10
-              contents = contents.replace matched, "url('#{url}?#{buster}')"
-              if --i is 0
-                done()
+              # contents = contents.replace matched, "url('#{url}?#{buster}')"
+              replaceMap[matched] = "url('#{url}?#{buster}')"
+              done()
             stream.pipe hash
-            matched
 
     throw new PluginError PLUGIN_NAME, 'Stream is not supported' if file.isStream()
