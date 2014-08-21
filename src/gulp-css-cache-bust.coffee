@@ -67,8 +67,7 @@ module.exports = (opts = {}) ->
               stream.removeAllListeners()
               hash.end()
               buster = hash.read().substr 0, 10
-              # contents = contents.replace matched, "url('#{url}?#{buster}')"
-              replaceMap[matched] = "url('#{url}?#{buster}')"
+              replaceMap[matched] = """url("#{url}?#{buster}")"""
               done()
             stream.pipe hash
 
