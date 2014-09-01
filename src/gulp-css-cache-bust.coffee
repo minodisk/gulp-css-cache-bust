@@ -1,6 +1,7 @@
 through = require 'through2'
 { PluginError } = require 'gulp-util'
 { resolve } = require 'path'
+{ parse } = require 'url'
 { exists, createReadStream } = require 'fs'
 { createHash } = require 'crypto'
 { clone, assign } = require 'lodash'
@@ -46,20 +47,22 @@ module.exports = (opts = {}) ->
 
       while (result = rUrl.exec contents)?
         [matched, url] = result
-        path = resolve opts.base, '.' + url
+        { pathname } = parse url
+
+        if opts.base isnt '' and pathname.charAt(0) is '/'
+          path = resolve opts.base, pathname.substr 1
+        else
+          path = resolve opts.base, pathname
+
         continue if replaceMap[matched]?
-        replaceMap[matched] = ''
+        replaceMap[matched] = matched
 
         counter++
-        do (matched, url, path) ->
-          # console.log 'start:', url
+        do (matched, pathname, path) ->
           exists path, (isExists) ->
             unless isExists
               done()
               return
-
-            # console.log 'read hash:', path
-
             stream = createReadStream path
             hash = createHash 'md5'
             hash.setEncoding 'hex'
@@ -67,7 +70,7 @@ module.exports = (opts = {}) ->
               stream.removeAllListeners()
               hash.end()
               buster = hash.read().substr 0, 10
-              replaceMap[matched] = """url("#{url}?#{buster}")"""
+              replaceMap[matched] = """url("#{pathname}?#{buster}")"""
               done()
             stream.pipe hash
 

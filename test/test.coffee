@@ -14,3 +14,25 @@ describe 'gulp-css-cache-bust', ->
     stream.on 'end', done
     stream.write file
     stream.end()
+
+  it "should resolve relative path", (done) ->
+    stream = bust base: './test/fixtures'
+    buffer = new Buffer 'url(./images/red.png)'
+    file = new File contents: buffer
+    stream.on 'data', (newFile) ->
+      expect newFile.contents.toString()
+      .to.be.equal 'url("./images/red.png?d391193181")'
+    stream.on 'end', done
+    stream.write file
+    stream.end()
+
+  it "should resolve path with query", (done) ->
+    stream = bust base: './test/fixtures'
+    buffer = new Buffer 'url(./images/red.png?dummy)'
+    file = new File contents: buffer
+    stream.on 'data', (newFile) ->
+      expect newFile.contents.toString()
+      .to.be.equal 'url("./images/red.png?d391193181")'
+    stream.on 'end', done
+    stream.write file
+    stream.end()
